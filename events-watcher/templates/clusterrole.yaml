@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  labels:
+    helm.sh/chart: events-watcher-0.1.0
+    app.kubernetes.io/name: events-watcher
+    app.kubernetes.io/instance: RELEASE-NAME
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  name: events-watcher
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - "*"

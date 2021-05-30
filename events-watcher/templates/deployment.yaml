@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-watcher
+  labels:
+    helm.sh/chart: events-watcher-0.1.0
+    app.kubernetes.io/name: events-watcher
+    app.kubernetes.io/instance: RELEASE-NAME
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: events-watcher
+      app.kubernetes.io/instance: RELEASE-NAME
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: events-watcher
+        app.kubernetes.io/instance: RELEASE-NAME
+    spec:
+      serviceAccountName: events-watcher
+      securityContext:
+        {}
+      containers:
+        - name: events-watcher
+          securityContext:
+            {}
+          image: "mohanrajravi/events-watcher:0.1"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {}
