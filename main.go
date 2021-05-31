@@ -7,7 +7,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-
 	//"reflect"
 
 	"log"
@@ -43,7 +42,7 @@ func main() {
 	//println(namespace.Items)
 	for _, s := range namespace.Items {
 		//fmt.Println("I is", i, "S is", s)
-		fmt.Println(s.Name)
+		fmt.Println("namespace: ", s.Name)
 	}
 
 	namespaceVersion := namespace.ListMeta.ResourceVersion
@@ -55,6 +54,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+	//fmt.Println("watcher is ", watcher.ResultChan())
 	ch := watcher.ResultChan()
 	for {
 		event := <-ch
@@ -62,10 +62,13 @@ func main() {
 		if !ok {
 			panic("Could not cast to Endpoint")
 		}
-		fmt.Printf("%v\n", endpoints.ObjectMeta.Name)
-		for _, endpoint := range endpoints.Namespace {
-			fmt.Printf("%v\n", endpoint)
-		}
+		fmt.Println("Namespace", endpoints.Name, endpoints.Status.Phase)
+		//fmt.Printf("%T\n", endpoints.Status)
+		//fmt.Printf("%v\n", endpoints.ObjectMeta.Name)
+		//for _, endpoint := range endpoints.Name {
+		//	//fmt.Printf("%v\n", endpoint)
+		//	fmt.Println(endpoint)
+		//}
 	}
 
 }
